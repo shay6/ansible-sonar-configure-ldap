@@ -1,0 +1,47 @@
+#certificates - create variables and with_items
+# check regex syntax
+#recover for failure
+---
+- hosts: all
+  gather_facts: yes
+  remote_user: root
+  become: yes
+  
+  vars_files:
+     - vars/params.yml
+  
+  vars_prompt:
+  - name: "ldap_bindPassword"
+    prompt: "Enter LDAP bind pass"
+    private: yes
+  
+  tasks:
+  - name: Check ui server product
+    shell: dmidecode | grep Product | awk '{print $3}'
+    register: product
+
+  - name: Import Red Hat internal CA
+    include_tasks: authorities.yml
+    when: product.stdout = "OpenStack"
+
+  - name: Copy ldap params to conf file
+    blockinfile:
+      path: "{{ soanr_conf_file }}"
+      block: |
+         sonar.security.realm={{ sonar_security_realm }}
+         sonar.security.savePassword={{ sonar_security_savePassword }}
+         ldap.url={{ ldap_url }}                                           
+         ldap.authentication={{ ldap_authentication }}
+         ldap.bindDn={{ ldap_bindDn }}                    
+         ldap.bindPassword={{ ldap_bindPassword }}
+         ldap.user.baseDn={{ ldap_user_baseDn }}
+         ldap.user.request={{ ldap_user_request }}
+
+  - name: Restart Sonar service
+    service: name=sonar state=restarted enabled=yes              
+                                                             
+  - name: Ensure LDAP is configured well
+    wait_for:                                                  
+      path: {{ sonar_web_logs }}
+      delay: 10                                                
+      search_regex: '.*Test LDAP connection*OK$'

@@ -1,0 +1,14 @@
+# Import the Red Hat Corporate IT CA root
+# Trust the old "Red Hat IS CA"
+# Import the Eng-Ops CA
+- name: Import the Red Hat CA
+  uri:
+    url: "{{ item }}"
+    dest: "{{ CA_folder }}"
+  with_items:
+     - "{{ RH_corporate_IT_CA_url }}" 
+     - "{{ RH_IS_CA_url }}"
+     - "{{ eng_ops_CA_url }}"
+
+- name: update CA
+  shell: update-ca-trust extract

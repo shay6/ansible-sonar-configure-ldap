@@ -1,0 +1,19 @@
+# General variables                                                             
+sonar_conf_file: /usr/local/sonar/conf/sonar.properties 
+sonar_web_logs: /usr/local/sonar/logs/web.log
+
+# LDAP variables
+sonar_security_realm: LDAP
+sonar_security_savePassword: False
+ldap_url: ldaps://ldap.corp.redhat.com
+ldap_authentication: simple
+ldap_bindDn: uid=sonar,ou=serviceaccounts,dc=redhat,dc=com
+#ldap_bindPassword: 7mpnadx5wvbjFLo@
+ldap_user_baseDn: dc=redhat,dc=com
+ldap_user_request: (uid={login})
+
+# Path for RedHat CA and url for downloading
+CA_folder: /etc/pki/ca-trust/source/anchors/
+RH_corporate_IT_CA_url: https://password.corp.redhat.com/RH-IT-Root-CA.crt 
+RH_IS_CA_url: https://password.corp.redhat.com/legacy.crt
+eng_ops_CA_url: https://engineering.redhat.com/Eng-CA.crt
