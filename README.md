@@ -1,0 +1,1 @@
+# ansible-sonar-configure-ldap
