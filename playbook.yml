@@ -1,6 +1,3 @@
-#certificates - create variables and with_items
-# check regex syntax
-#recover for failure
 ---
 - hosts: all
   gather_facts: yes
@@ -26,7 +23,7 @@
 
   - name: Copy ldap params to conf file
     blockinfile:
-      path: "{{ soanr_conf_file }}"
+      path: "{{ sonar_conf_file }}"
       block: |
          sonar.security.realm={{ sonar_security_realm }}
          sonar.security.savePassword={{ sonar_security_savePassword }}
@@ -36,12 +33,14 @@
          ldap.bindPassword={{ ldap_bindPassword }}
          ldap.user.baseDn={{ ldap_user_baseDn }}
          ldap.user.request={{ ldap_user_request }}
+      backup: yes
 
   - name: Restart Sonar service
     service: name=sonar state=restarted enabled=yes              
                                                              
   - name: Ensure LDAP is configured well
-    wait_for:                                                  
-      path: {{ sonar_web_logs }}
+    wait_for:
+      path: "{{ sonar_web_logs }}"
       delay: 10                                                
-      search_regex: '.*Test LDAP connection*OK$'
+      search_regex: '.*Test LDAP connection.*OK$'
+      timeout: 40

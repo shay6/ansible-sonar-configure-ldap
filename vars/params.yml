@@ -8,7 +8,6 @@ sonar_security_savePassword: False
 ldap_url: ldaps://ldap.corp.redhat.com
 ldap_authentication: simple
 ldap_bindDn: uid=sonar,ou=serviceaccounts,dc=redhat,dc=com
-ldap_bindPassword: 
 ldap_user_baseDn: dc=redhat,dc=com
 ldap_user_request: (uid={login})
 

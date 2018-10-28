@@ -5,6 +5,7 @@
   uri:
     url: "{{ item }}"
     dest: "{{ CA_folder }}"
+    status_code: 304,200
   with_items:
      - "{{ RH_corporate_IT_CA_url }}" 
      - "{{ RH_IS_CA_url }}"
